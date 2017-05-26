@@ -1,6 +1,7 @@
 !.gitignore
 .idea
 config/config.properties
+config.sb-us13.properties
 data
 lib
 target

@@ -43,6 +43,10 @@ public class SolrStringTypePreprocessor implements IDocProcPlugin {
 
 
     public String getNavFieldForm(String rawToken) {
+        String retValue = "";
+        if (!checkReadyForProcessing()) return retValue;
+
+
         NavFieldFormAnalyzer formAnalyzer =  (NavFieldFormAnalyzer) SolrStringTypePreprocessor.analyzerMap.get("navFieldFormAnalyzer");
 
         TokenStream ts =  formAnalyzer.tokenStream("fieldNotNeeded",rawToken );
@@ -65,7 +69,6 @@ public class SolrStringTypePreprocessor implements IDocProcPlugin {
 
         }
 
-        String retValue = "";
         if (list.size() > 1) {
             //todo: we need LogType
             System.out.println("Analyzer produces more than one term - should not happen");
@@ -82,11 +85,15 @@ public class SolrStringTypePreprocessor implements IDocProcPlugin {
 
 
     public String getNavFieldCombined(String rawToken) {
+
+        String analyzedToken = "";
+        if (!checkReadyForProcessing()) return analyzedToken;
+
+
         Analyzer combinedAnalyzer =  SolrStringTypePreprocessor.analyzerMap.get("navFieldCombinedAnalyzer");
 
         TokenStream ts =  combinedAnalyzer.tokenStream("fieldNotNeeded",rawToken );
 
-        String analyzedToken = "";
         try {
             ts.reset();
 
@@ -166,4 +173,12 @@ public class SolrStringTypePreprocessor implements IDocProcPlugin {
 
 
     }
+
+    private boolean checkReadyForProcessing() {
+
+        return inProductionMode;
+
+    }
+
+
 }

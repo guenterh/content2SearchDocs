@@ -189,7 +189,7 @@ public class FulltextContentEnrichment implements IDocProcPlugin{
                                 fetch = false;
                                 String type = connection.getContentType();
                                 for (String tType: allowedContentType) {
-                                    if (type.equals(tType)) {
+                                    if (type.toLowerCase().equals(tType.toLowerCase())) {
                                         fetch = true;
                                         break;
                                     }

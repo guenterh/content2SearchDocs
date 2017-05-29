@@ -4,7 +4,9 @@ import org.culturegraph.mf.io.FileOpener;
 import org.culturegraph.mf.io.LineReader;
 import org.culturegraph.mf.io.ObjectWriter;
 import org.swissbib.documentprocessing.exceptions.XML2SolrInitException;
+import org.swissbib.documentprocessing.mf.command.XSLTPipeStart;
 import org.swissbib.documentprocessing.mf.command.XSLTPipeStep;
+import org.swissbib.documentprocessing.mf.command.XSLTPipeStop;
 import org.swissbib.documentprocessing.plugins.IDocProcPlugin;
 import org.swissbib.documentprocessing.utils.ReadFileProperties;
 
@@ -34,8 +36,11 @@ public class MFDocProcFlow {
 
             //swissbib.solr.step1.xsl
 
-            XSLTPipeStep step1 =  new XSLTPipeStep();
+            XSLTPipeStart step1 =  new XSLTPipeStart();
             step1.setTemplate("xslt/swissbib.solr.step1.xsl");
+            step1.setWeedingTemplate("xslt/weedholdings.xsl");
+            step1.setHoldingsTemplate("xslt/collect.holdings.xsl");
+
             lr.setReceiver(step1);
 
 
@@ -45,7 +50,7 @@ public class MFDocProcFlow {
 
             step1.setReceiver(step2);
 
-            XSLTPipeStep step3 =  new XSLTPipeStep();
+            XSLTPipeStop step3 =  new XSLTPipeStop();
             step3.setTemplate("xslt/swissbib.solr.vufind2.xsl");
             step3.setReceiver(ow);
             step2.setReceiver(step3);

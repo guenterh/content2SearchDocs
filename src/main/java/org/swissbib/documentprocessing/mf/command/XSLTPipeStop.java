@@ -14,12 +14,11 @@ import java.util.regex.Pattern;
 /**
  * Created by swissbib on 29.05.17.
  */
-public class XSLTPipeStep extends DefaultObjectPipe<XSLTObject, ObjectReceiver<XSLTObject>> {
+public class XSLTPipeStop extends DefaultObjectPipe<XSLTObject, ObjectReceiver<String>> {
 
     private String templatePath;
     private Pattern linePattern = Pattern.compile("<record .*?>.*?</record>", Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     Transformer transformer;
-
 
     public void setTemplate(String templatePath) {
 
@@ -60,9 +59,11 @@ public class XSLTPipeStep extends DefaultObjectPipe<XSLTObject, ObjectReceiver<X
 
             try {
 
+                transformer.setParameter("holdingsStructure",obj.holdings);
+
                 transformer.transform(recordSource, recordTarget);
-                obj.record =  recordTargetBuffer.toString();
-                getReceiver().process(obj);
+                //obj.record =  recordTargetBuffer.toString();
+                getReceiver().process(recordTargetBuffer.toString());
 
             } catch (TransformerException transException) {
                 transException.printStackTrace();
@@ -72,7 +73,5 @@ public class XSLTPipeStep extends DefaultObjectPipe<XSLTObject, ObjectReceiver<X
         }
 
     }
-
-
 
 }
